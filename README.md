@@ -53,51 +53,51 @@ To complete this project, you’ll use your knowledge of REST API design, Node.j
 
 #### Routes
 
-11. The user shall log in by accessing the GET /api/users 200 route.
-12. When the user provides an incorrect email address during login, the app shall return 401 error to the user.
-13. When the user provides an incorrect password during login, the app shall return 401 error to the user.
-14. The user shall create a user profile by accessing the POST /api/users 201 route.
-15. When the user creates a user profile, the app shall require the folloing values:
+17. The user shall log in by accessing the GET /api/users 200 route.
+18. When the user provides an incorrect email address during login, the app shall return 401 error to the user.
+19. When the user provides an incorrect password during login, the app shall return 401 error to the user.
+20. The user shall create a user profile by accessing the POST /api/users 201 route.
+21. When the user creates a user profile, the app shall require the folloing values:
     1. firstName
     2. lastName
     3. emailAddress
     4. password
-16. When the user creates a user profile and fails to enter the required information, the app shall return a 400 error to the user.
-17. When the user creates a user profile, the app shall validate that the entered email address is a real address.
-18. When the user creates a user profile, the app shall ensure that the entered email address doesn't belong to an existing user.
-19. The app shall hash the user's password before saving it to the database.
-20. When the user successfully creates a profile, the app shall set the Location header to '/' and shall return no content to the user.
-21. The user shall access all courses by accessing the GET /api/courses 200 route.
-22. The user shall access a single courses by accessing the GET /api/courses/:id 200 route.
-23. When the user accesses course information, the app shall use Mongoose's deep population function to only return the course owners firstName and lastName properties.
-24. The user shall create a new course by accessing the POST /api/courses 201 route.
-25. When the user creates a new course, the app shall require the following values:
+22. When the user creates a user profile and fails to enter the required information, the app shall return a 400 error to the user.
+23. When the user creates a user profile, the app shall validate that the entered email address is a real address.
+24. When the user creates a user profile, the app shall ensure that the entered email address doesn't belong to an existing user.
+25. The app shall hash the user's password before saving it to the database.
+26. When the user successfully creates a profile, the app shall set the Location header to '/' and shall return no content to the user.
+27. The user shall access all courses by accessing the GET /api/courses 200 route.
+28. The user shall access a single courses by accessing the GET /api/courses/:id 200 route.
+29. When the user accesses course information, the app shall use Mongoose's deep population function to only return the course owners firstName and lastName properties.
+30. The user shall create a new course by accessing the POST /api/courses 201 route.
+31. When the user creates a new course, the app shall require the following values:
     1. title
     2. description
-26. When the user creates a new coures and fails to provide the required information, the app shall return a 400 error to the user.
-27. When the user creates a new course, the app shall set the Location header to match the URI of the new course and shall return no content.
-28. The user shall update a course by accessing the PUT /api/courses/:id 204 route.
-29. When the user updates a course, the app shall require the following values:
+32. When the user creates a new coures and fails to provide the required information, the app shall return a 400 error to the user.
+33. When the user creates a new course, the app shall set the Location header to match the URI of the new course and shall return no content.
+34. The user shall update a course by accessing the PUT /api/courses/:id 204 route.
+35. When the user updates a course, the app shall require the following values:
     1. title
     2. description
-30. When the user attempts to update a course, the app shall ensure that the course belongs to the user.
-31. When the user attempts to update a course that doesn't belong to the user, the app shall return a 403 error.
-32. When the user updates the course, the app shall return no content to the user.
-33. When the user updates a course and fails to provide the required information, the app shall return a 400 error to the user.
-34. The user shall delete a course by accessing the DELETE /api/courses/:id 204 route.
-35. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
-36. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
-37. When the user deletes the course, the app shall return no content to the user.
+36. When the user attempts to update a course, the app shall ensure that the course belongs to the user.
+37. When the user attempts to update a course that doesn't belong to the user, the app shall return a 403 error.
+38. When the user updates the course, the app shall return no content to the user.
+39. When the user updates a course and fails to provide the required information, the app shall return a 400 error to the user.
+40. The user shall delete a course by accessing the DELETE /api/courses/:id 204 route.
+41. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
+42. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
+43. When the user deletes the course, the app shall return no content to the user.
 
 #### User Requirements
 
-38. The user can create an account that is stored in the database.
-39. The user can log into their account.
-40. The user can retrieve a list of courses.
-41. When the user is logged in, the user can view information about a single course.
-42. When the user is logged in, the user can add a course.
-43. When {the user is logged in} AND {the user owns the course}, the user can update the course's information.
-44. When {the user is logged in} AND {the user owns the course}, the user can delete a course.
+44. The user can create an account that is stored in the database.
+45. The user can log into their account.
+46. The user can retrieve a list of courses.
+47. When the user is logged in, the user can view information about a single course.
+48. When the user is logged in, the user can add a course.
+49. When {the user is logged in} AND {the user owns the course}, the user can update the course's information.
+50. When {the user is logged in} AND {the user owns the course}, the user can delete a course.
 
 ### Overview of the Provided Project Files
 
