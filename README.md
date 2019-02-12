@@ -44,12 +44,12 @@ To complete this project, you’ll use your knowledge of REST API design, Node.j
    4. emailAddress - String
    5. password - String
 10. The Course document shall use the following schema:
-11. \_id - ObjectId, system generated
-12. user - \_id from the User collection
-13. title - String
-14. description - String
-15. estimatedTime - String
-16. materialsNeeded - String
+   1. \_id - ObjectId, system generated
+   2. user - \_id from the User collection
+   3. title - String
+   4. description - String
+   5. estimatedTime - String
+   6. materialsNeeded - String
 
 #### Routes
 
