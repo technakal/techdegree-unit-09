@@ -38,18 +38,18 @@ To complete this project, you’ll use your knowledge of REST API design, Node.j
 #### Schemas
 
 9. The User document shall use the following schema:
-   1. \_id - ObjectId, system generated
-   2. firstName - String
-   3. lastName - String
-   4. emailAddress - String
-   5. password - String
+   - \_id - ObjectId, system generated
+   - firstName - String
+   - lastName - String
+   - emailAddress - String
+   - password - String
 10. The Course document shall use the following schema:
-   1. \_id - ObjectId, system generated
-   2. user - \_id from the User collection
-   3. title - String
-   4. description - String
-   5. estimatedTime - String
-   6. materialsNeeded - String
+   - \_id - ObjectId, system generated
+   - user - \_id from the User collection
+   - title - String
+   - description - String
+   - estimatedTime - String
+   - materialsNeeded - String
 
 #### Routes
 
