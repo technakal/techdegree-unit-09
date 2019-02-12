@@ -43,7 +43,7 @@ To complete this project, you’ll use your knowledge of REST API design, Node.j
    3. lastName - String
    4. emailAddress - String
    5. password - String
-10. The Course document shall use the following schema:  
+10. The Course document shall use the following schema:
    1. \_id - ObjectId, system generated
    2. user - \_id from the User collection
    3. title - String
