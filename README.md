@@ -2,7 +2,102 @@
 
 ## Treehouse Techdegree Unit 09 Project
 
+In this project, you’ll create a REST API using Express. The API will provide a way for users to administer a school database containing information about courses: users can interact with the database by retrieving a list of courses, as well as adding, updating and deleting courses in the database.
+
+In addition, the project will require users to create an account and log-in to make changes to the database.
+
+To complete this project, you’ll use your knowledge of REST API design, Node.js, and Express to create API routes, along with the Mongoose ORM for data modeling, validation, and persistence. To test your application, you'll use Postman, a popular application for exploring and testing REST APIs.
+
+### Routes
+
+- GET /api/users 200
+- POST /api/users 201
+- GET /api/courses 200
+- POST /api/courses 201
+- PUT /api/courses 201
+- DELETE /api/courses 201
+
 ### Requirements
+
+#### Technology
+
+1. Create a REST API using Express.
+2. Use mongoDB for the backend database.
+3. Use Mongoose to connect the Express app to the database.
+4. When the app successfully connects to the database, log a success message to the console.
+5. When the app fails to connect to the database, log a failure message to the console.
+6. The app shall use Mongoose to validate user entry.
+7. The app shall use `bcrypt` to hash the password.
+8. The app shall use `basic-auth` to ensure that users must be logged in to perform create, update, and delete functions on the courses routes.
+   1. The authentication middelware shall apply to the following routes;
+      1. GET /api/users
+      2. POST /api/courses
+      3. PUT /api/courses
+      4. DELETE /api/courses.
+
+#### Schemas
+
+9. The User document shall use the following schema:
+   1. \_id - ObjectId, system generated
+   2. firstName - String
+   3. lastName - String
+   4. emailAddress - String
+   5. password - String
+10. The Course document shall use the following schema:
+11. \_id - ObjectId, system generated
+12. user - \_id from the User collection
+13. title - String
+14. description - String
+15. estimatedTime - String
+16. materialsNeeded - String
+
+#### Routes
+
+11. The user shall log in by accessing the GET /api/users 200 route.
+12. When the user provides an incorrect email address during login, the app shall return 401 error to the user.
+13. When the user provides an incorrect password during login, the app shall return 401 error to the user.
+14. The user shall create a user profile by accessing the POST /api/users 201 route.
+15. When the user creates a user profile, the app shall require the folloing values:
+    1. firstName
+    2. lastName
+    3. emailAddress
+    4. password
+16. When the user creates a user profile and fails to enter the required information, the app shall return a 400 error to the user.
+17. When the user creates a user profile, the app shall validate that the entered email address is a real address.
+18. When the user creates a user profile, the app shall ensure that the entered email address doesn't belong to an existing user.
+19. The app shall hash the user's password before saving it to the database.
+20. When the user successfully creates a profile, the app shall set the Location header to '/' and shall return no content to the user.
+21. The user shall access all courses by accessing the GET /api/courses 200 route.
+22. The user shall access a single courses by accessing the GET /api/courses/:id 200 route.
+23. When the user accesses course information, the app shall use Mongoose's deep population function to only return the course owners firstName and lastName properties.
+24. The user shall create a new course by accessing the POST /api/courses 201 route.
+25. When the user creates a new course, the app shall require the following values:
+    1. title
+    2. description
+26. When the user creates a new coures and fails to provide the required information, the app shall return a 400 error to the user.
+27. When the user creates a new course, the app shall set the Location header to match the URI of the new course and shall return no content.
+28. The user shall update a course by accessing the PUT /api/courses/:id 204 route.
+29. When the user updates a course, the app shall require the following values:
+    1. title
+    2. description
+30. When the user attempts to update a course, the app shall ensure that the course belongs to the user.
+31. When the user attempts to update a course that doesn't belong to the user, the app shall return a 403 error.
+32. When the user updates the course, the app shall return no content to the user.
+33. When the user updates a course and fails to provide the required information, the app shall return a 400 error to the user.
+34. The user shall delete a course by accessing the DELETE /api/courses/:id 204 route.
+35. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
+36. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
+37. When the user deletes the course, the app shall return no content to the user.
+
+#### User Requirements
+
+38. The user can create an account that is stored in the database.
+39. The user can log into their account.
+40. The user can retrieve a list of courses.
+41. When the user is logged in, the user can view information about a single course.
+42. When the user is logged in, the user can add a course.
+43. When {the user is logged in} AND {the user owns the course}, the user can update the course's information.
+44. When {the user is logged in} AND {the user owns the course}, the user can delete a course.
 
 ### Overview of the Provided Project Files
 
