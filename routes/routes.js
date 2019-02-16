@@ -1,9 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const auth = require('basic-auth');
 const { check, validationResult } = require('express-validator/check');
 const User = require('../models/models').User;
 const Course = require('../models/models').Course;
+
+const authenticateUser = (req, res, next) => {
+  let message = '';
+
+  const credentials = auth(req);
+
+  if(credentials) {
+    User.findOne({ emailAddress: credentials.name }, (err, doc) => {
+      if(err) return next(err);
+      if( doc ) {
+        const authenticated = bcrypt.compareSync(credentials.pass, doc.password);
+        if(authenticated) {
+          req.currentUser = doc;
+          next();
+        } else {
+          res.status(401).json({error: 'Access Denied'});
+        }
+      } else {
+        res.status(401).json({error: 'Access Denied'});
+      }
+    });
+  } else {
+    res.status(401).json({error: 'Access Denied'});
+  }
+};
 
 router.param('id', (req, res, next, id) => {
   Course.findById(id, (err, doc) => {
@@ -18,15 +44,13 @@ router.param('id', (req, res, next, id) => {
   })
 });
 
-// TODO - GET /api/users 200
-// TODO 17. The user shall log in by accessing the GET /api/users 200 route.
-// TODO - 18. When the user provides an incorrect email address during login, the app shall return 401 error to the user.
-// TODO - 19. When the user provides an incorrect password during login, the app shall return 401 error to the user.
-router.get('/users', (req, res) => {
-  res.status(200).json({
-    todo: 'create sign-in route',
-    description: 'This route authenticates the user.'
-  })
+/**
+ * Authenticate to the application.
+ * GET /api/users 200
+ */
+router.get('/users', authenticateUser, (req, res) => {
+  const user = req.currentUser
+  res.status(200).json({user});
 });
 
 /**
@@ -106,8 +130,7 @@ router.get('/courses/:id', (req, res, next) => {
  * Validates required fields.
  * POST /api/courses 201
  */
-// TODO - Dynamically pass in user after authorization and before course creation
-router.post('/courses', [
+router.post('/courses', authenticateUser, [
   check('title')
     .exists({checkNull: true, checkFalsy: true})
     .withMessage('Course creation requires title.'),
@@ -121,32 +144,47 @@ router.post('/courses', [
     return res.status(400).json({errors: errorMessages});
   }
   const course = new Course(req.body);
+  course.user = req.currentUser._id;
   course.save((err, course) => {
     if (err) return next(err);
     res.status(201).location('/' + course._id).end();
   });
 });
 
-// TODO - PUT /api/courses/:id 201
-// TODO - 34. The user shall update a course by accessing the PUT /api/courses/:id 204 route.
-// TODO - 35. When the user updates a course, the app shall require the following values: title, description
+/**
+ * Update the course matching the requested :id
+ * PUT /api/courses/:id 201
+ * @param [string] id - The course id of the course to update.
+ */
 // TODO - 36. When the user attempts to update a course, the app shall ensure that the course belongs to the user.
 // TODO - 37. When the user attempts to update a course that doesn't belong to the user, the app shall return a 403 error.
-// TODO - 38. When the user updates the course, the app shall return no content to the user.
-// TODO - 39. When the user updates a course and fails to provide the required information, the app shall return a 400 error to the user.
-router.put('/courses/:id', (req, res, next) => {
-  res.status(201).json({
-    id: req.params.id,
-    todo: 'set up auth',
-    description: 'This is the route for updating a course.',
+router.put('/courses/:id', authenticateUser, [
+  check('title')
+    .exists({checkNull: true, checkFalsy: true})
+    .withMessage('Course update requires title.'),
+  check('description')
+    .exists({checkNull: true, checkFalsy: true})
+    .withMessage('Course update requires description.')
+], (req, res, next) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    const errorMessages = errors.array().map(error => error.msg);
+    return res.status(400).json({errors: errorMessages});
+  }
+  Course.findOne({ _id: req.course._id }, req.body, (err, course) => {
+    if ( err ) return next( err );201 ).end();
+    res.status(
   });
 });
 
-// TODO - DELETE /api/courses/:id 201
+/**
+ * Delete the course matching the input :id
+ * DELETE /api/courses/:id 201
+ * @param [string] id - The course id of the course to delete.
+ */
 // TODO - 41. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
 // TODO - 42. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
 router.delete('/courses/:id', (req, res, next) => {
-  console.log(req.course);
   req.course.remove(err => {
     if ( err ) return next( err );
     res.status( 201 );
