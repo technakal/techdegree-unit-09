@@ -143,25 +143,13 @@ router.put('/courses/:id', (req, res, next) => {
 });
 
 // TODO - DELETE /api/courses/:id 201
-// TODO - 40. The user shall delete a course by accessing the DELETE /api/courses/:id 204 route.
 // TODO - 41. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
 // TODO - 42. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
-// TODO - 43. When the user deletes the course, the app shall return no content to the user.
 router.delete('/courses/:id', (req, res, next) => {
-  Course.findById(req.params.id, (err, doc) => {
-    if (err) return next(err);
-    if (!doc) {
-      err = new Error('Not Found');
-      err.status = 404;
-      return next(err);
-    }
-    doc.remove(err => {
-      if (err) return next(err);
-      doc.save((err, course) => {
-        if (err) return next(err);
-        res.status(201).json({ status: 'deleted' });
-      });
-    });
+  console.log(req.course);
+  req.course.remove(err => {
+    if ( err ) return next( err );
+    res.status( 201 );
   });
 });
 
