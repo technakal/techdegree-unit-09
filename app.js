@@ -3,17 +3,53 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 // variable to enable global error logging
-const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
+const enableGlobalErrorLogging =
+  process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
 // create the Express app
 const app = express();
+app.use(express.json());
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-// TODO setup your api routes here
+// set up mongoDB connection
+mongoose.connect('mongodb://localhost:27017/fsjstd-restapi', {
+  useNewUrlParser: true,
+});
+
+const db = mongoose.connection;
+
+// When the app fails to connect to the database, log a failure message to the console.
+db.on('error', err => {
+  console.error('Connection error: ', err);
+});
+
+// When the app successfully connects to the database, log a success message to the console.
+db.once('open', () => {
+  console.log('Connection successful.');
+});
+
+// assign headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE');
+    return res.status(200).json({});
+  }
+  next();
+});
+
+// setup your api routes
+const routes = require('./routes/routes');
+app.use('/api', routes);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
