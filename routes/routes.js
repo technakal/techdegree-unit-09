@@ -6,6 +6,12 @@ const { check, validationResult } = require('express-validator/check');
 const User = require('../models/models').User;
 const Course = require('../models/models').Course;
 
+/**
+ * Authenticates the user to the app.
+ * @param req
+ * @param res
+ * @param next
+ */
 const authenticateUser = (req, res, next) => {
   let message = '';
 
@@ -31,6 +37,20 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
+/**
+ * Checks if the current user is the owner of the current course.
+ * @param [object] req - The request object, containing course and user information.
+ * @returns {boolean}
+ */
+const isCourseOwner = (req) => {
+  const courseOwner = req.course.user[0]._id.toString();
+  const currentOwner = req.currentUser._id.toString();
+  return courseOwner === currentOwner;
+};
+
+/**
+ * Pulls the course associated with the entered id.
+ */
 router.param('id', (req, res, next, id) => {
   Course.findById(id, (err, doc) => {
     if(err) return next(err);
@@ -114,14 +134,14 @@ router.get('/courses', (req, res, next) => {
 /**
  * Retrieve a single course, by ID.
  * Returns the course owner's first and last name.
- * GET /courses/:id 201
+ * GET /courses/:id 200
  */
 router.get('/courses/:id', (req, res, next) => {
   Course.findOne({ _id: req.params.id})
     .populate('user', ['firstName', 'lastName'])
     .exec((err, course) => {
       if(err) return next(err);
-      res.status(201).json(course);
+      res.status(200).json(course);
     });
 });
 
@@ -153,11 +173,10 @@ router.post('/courses', authenticateUser, [
 
 /**
  * Update the course matching the requested :id
- * PUT /api/courses/:id 201
+ * Prevents the user from updating the course if they are not the owner.
+ * PUT /api/courses/:id 204
  * @param [string] id - The course id of the course to update.
  */
-// TODO - 36. When the user attempts to update a course, the app shall ensure that the course belongs to the user.
-// TODO - 37. When the user attempts to update a course that doesn't belong to the user, the app shall return a 403 error.
 router.put('/courses/:id', authenticateUser, [
   check('title')
     .exists({checkNull: true, checkFalsy: true})
@@ -171,24 +190,31 @@ router.put('/courses/:id', authenticateUser, [
     const errorMessages = errors.array().map(error => error.msg);
     return res.status(400).json({errors: errorMessages});
   }
-  Course.findOne({ _id: req.course._id }, req.body, (err, course) => {
-    if ( err ) return next( err );201 ).end();
-    res.status(
-  });
+  if(isCourseOwner(req)) {
+    Course.findOneAndUpdate({ _id: req.params.id }, req.body, (err, doc) => {
+      if(err) return next(err);
+      res.status(204).json(doc);
+    });
+  } else {
+    res.status(403).json('Unauthorized');
+  }
 });
 
 /**
  * Delete the course matching the input :id
- * DELETE /api/courses/:id 201
+ * Prevents the user from deleting the course if they are not the course owner.
+ * DELETE /api/courses/:id 204
  * @param [string] id - The course id of the course to delete.
  */
-// TODO - 41. When the user attempts to delete a course, the app shall ensure that the course belongs to the user.
-// TODO - 42. When the user attempts to delete a course that doesn't belong to the user, the app shall return a 403 error.
-router.delete('/courses/:id', (req, res, next) => {
-  req.course.remove(err => {
-    if ( err ) return next( err );
-    res.status( 201 );
-  });
+router.delete('/courses/:id', authenticateUser, (req, res, next) => {
+  if(isCourseOwner(req)) {
+    Course.findOneAndDelete({ _id: req.course._id }, (err) => {
+      if(err) return next(err);
+      res.status(204).json('Deleted');
+    })
+  } else {
+    res.status(403).json('Unauthorized');
+  }
 });
 
 module.exports = router;

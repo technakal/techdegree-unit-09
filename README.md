@@ -63,8 +63,8 @@ To complete this project, you’ll use your knowledge of REST API design, Node.j
     3. emailAddress
     4. password
 22. When the user creates a user profile and fails to enter the required information, the app shall return a 400 error to the user.
-23. When the user creates a user profile, the app shall validate that the entered email address is a real address.
-24. When the user creates a user profile, the app shall ensure that the entered email address doesn't belong to an existing user.
+23. When the user creates a user profile, the app shall validate that the entered email address is a real address. 400
+24. When the user creates a user profile, the app shall ensure that the entered email address doesn't belong to an existing user. 409
 25. The app shall hash the user's password before saving it to the database.
 26. When the user successfully creates a profile, the app shall set the Location header to '/' and shall return no content to the user.
 27. The user shall access all courses by accessing the GET /api/courses 200 route.
