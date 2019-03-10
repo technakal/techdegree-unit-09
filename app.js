@@ -4,6 +4,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging =
@@ -33,19 +34,12 @@ db.once('open', () => {
   console.log('Connection successful.');
 });
 
+const corsOptions = {
+  exposedHeaders: ['Location']
+};
+
 // assign headers
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE');
-    return res.status(200).json({});
-  }
-  next();
-});
+app.use(cors(corsOptions));
 
 // setup your api routes
 const routes = require('./routes/routes');
